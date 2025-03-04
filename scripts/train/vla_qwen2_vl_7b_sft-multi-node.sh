@@ -12,7 +12,6 @@ base_model_path="/public/models/mc-base-qwen2-vl-7b-250215"
 version="mc-vlp-vla-qwen2-vl-7b"
 WANDB_NAME="$version-c$total_number-e$epoch-b$batch-a$gradient_accumulation_steps"
 
-export WANDB_API_KEY="your_api_key"
 
 deepspeed --hostfile scripts/vla/hostfile --include="hgx1:$cuda_visible_devices@hgx2:$cuda_visible_devices@hgx3:$cuda_visible_devices@hgx4:$cuda_visible_devices" \
     actvlp/train/train.py \
