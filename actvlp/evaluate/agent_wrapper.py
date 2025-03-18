@@ -178,7 +178,7 @@ class VLLM_AGENT:
             prompt += "\nArrange the materials in the crafting grid according to the following pattern: \n"
             prompt += recipe[0]
         else:
-            item_name = env_prompt[11:].replace(" ","_")
+            item_name = env_prompt.replace(" ","_").split(":")[-1]
             prompt += self.create_recipe_prompt_from_library(item_name,)
         return prompt
         
@@ -217,35 +217,46 @@ class VLLM_AGENT:
         messages = []
         image = self.processor_wrapper.create_image_input(observations[0]) 
         method = self.method_map[need_crafting_table]
-        prompts = [self.create_instruction(instructions[0],method=method)]
-        thought= self.create_thought(instructions[0]) if self.instruction_type != 'simple' else ""
+        prompts = []
+        private_instruction = self.create_instruction(instructions[0],method=method)
+        thought= self.create_thought(instructions[0]) if self.instruction_type =="recipe" else ""
 
-        images = [image]
         if self.history_num:
             if not self.history: #如果历史为空
                 self.history = [(image,self.action_tokenizer.null_token()[0],copy.copy(thought),0)]*self.history_num
             new_history = [None]*self.history_num
             new_history[:-1] = self.history[1:]
             history_images = []
-            for im, action, past_thought,_ in self.history:
+            history_action_chunks = []
+            for hdx,(im, ac, past_thought,_) in enumerate(self.history):
+                prompt_input = ""
                 if self.instruction_type == 'recipe':
-                    prompts[-1] = prompts[-1]+"\nthought: " + past_thought + "\nobservation: "  #往上一个prompt上加上这一步的thought
-                elif self.instruction_type == 'simple':
-                    prompts[-1] = prompts[-1] + "\nobservation: "
-                history_images.append(im)
-                prompts.append("\naction: "+ action)
-            history_images.append(image)
-            images = history_images
+                    prompt_input = "\nthought: " + past_thought + "\nobservation: "  #往上一个prompt上加上这一步的thought
+                else:
+                    prompt_input = "\nobservation: "
+                if not hdx: #hdx==0
+                    prompt_input = private_instruction + prompt_input
+                print(ac,prompt_input,)
+                messages.append(self.processor_wrapper.create_message_vllm(role="user",input_type="image",prompt=[prompt_input],image=[im]))
+                messages.append(self.processor_wrapper.create_message_vllm(role="assistant",input_type="text",prompt=[ac],))
             
+        prompt_input = ""
         if self.instruction_type == 'recipe':
-            prompts[-1]  = prompts[-1]+"\nthought: " + thought + "\nobservation: "
-        elif self.instruction_type == 'simple':
-            prompts[-1]  = prompts[-1] + "\nobservation: "
+            prompt_input = "\nthought: " + thought + "\nobservation: "
+        else:
+            prompt_input = "\nobservation: "
+        if not self.history_num:
+            prompt_input = private_instruction + prompt_input
+        print(prompt_input)
+        exit()
+        messages.append(self.processor_wrapper.create_message_vllm(role="user",input_type="image",prompt=[prompt_input],image=[image]))
         
+        open_logprobs = False
         if verbos:
             print(prompts)
             open_logprobs = True
-        messages.append(self.processor_wrapper.create_message_vllm(prompt=prompts,image=images))
+        
+
         
         chat_completion = self.client.chat.completions.create(
             messages=messages,
@@ -267,5 +278,5 @@ class VLLM_AGENT:
 
         len_action = min(self.action_chunk_len,len(actions))
         self.actions = actions[:len_action]
-
+        
         return self.actions.pop(0)

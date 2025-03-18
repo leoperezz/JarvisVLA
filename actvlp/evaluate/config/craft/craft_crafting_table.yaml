@@ -20,4 +20,4 @@ init_inventory:
     quantity: ">3"
 
 need_crafting_table: False
-need_gui: False
+need_gui: True

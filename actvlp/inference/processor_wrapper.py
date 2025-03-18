@@ -163,13 +163,19 @@ class ProcessorWrapper:
             }
         return image_message
 
-    def create_message_vllm(self,image:Union[list,str,pathlib.PosixPath,np.ndarray,Image.Image],role:Literal["user","assistant"]="user",input_type:Literal["image","text"]="image",prompt:Union[list,str]="",):
+
+
+    def create_message_vllm(self,
+                            role:Literal["user","assistant"]="user",
+                            input_type:Literal["image","text"]="image",
+                            image:Union[list,str,pathlib.PosixPath,np.ndarray,Image.Image]=None,
+                            prompt:Union[list,str]="",):
         if role not in {"user","assistant"}:
             raise ValueError(f"a invalid role {role}")
         if isinstance(prompt,str):
             prompt = [prompt]
         message = {
-            "role": "user",
+            "role": role,
             "content": [],
         }
         if input_type=="image":
@@ -184,6 +190,12 @@ class ProcessorWrapper:
                     message["content"].append(self.get_image_message(image[idx]))
             for idx in range(len(prompt), len(image)):
                 message["content"].append(self.get_image_message(image[idx])) 
+        else:
+            for idx, text in enumerate(prompt):
+                message["content"].append({
+                    "type": "text",
+                    "text": f"{text}\n"
+                })
         return message
 
     def create_message(self,role="user",input_type="image",prompt:str="",image=None):

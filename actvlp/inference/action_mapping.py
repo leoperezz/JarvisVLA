@@ -2,7 +2,7 @@
 Author: Muyao 2350076251@qq.com
 Date: 2025-02-18 15:57:29
 LastEditors: Muyao 2350076251@qq.com
-LastEditTime: 2025-03-05 04:25:21
+LastEditTime: 2025-03-05 22:48:27
 '''
 
 import re
@@ -358,33 +358,21 @@ class OneActionTokenizer(ActionTokenizer):
         self.bases = bases
         # NULL_ACTION is the default null action; its encoding uses the middle values of the last two elements of bases
         self.NULL_ACTION = [0, (bases[-2] // 2) * bases[-2] + (bases[-1] // 2)]
-
-    def decode(self, tokens: Union[torch.Tensor, List]) -> List[OrderedDict]:
+    
+    def decode(self,tokens:Union[torch.Tensor,List]):
+        """decode the tokens to action
         """
-        Decode a sequence of tokens into actions.
-
-        Args:
-            tokens (Union[torch.Tensor, List]): Sequence of tokens representing actions.
-
-        Returns:
-            List[OrderedDict]: List of actions as OrderedDict objects.
-        """
-        # Convert tokens to group action representation
-        group_actions = self.token_2_group_action(tokens)
-        # Convert group action representation to decimal action representation
-        actions = [self.group_action_2_decimal_action(group_action) for group_action in group_actions]
-
+        group_actions = self.token_2_group_action(tokens,)
+        
+        actions = [self.group_action_2_decimal_action(group_action) for group_action in group_actions ]
         action_dicts = []
-        for action in actions:
-            # Convert the action into a dictionary with button and camera values
+        for action in  actions:
             action_dict = {
-                "buttons": np.array([action[0]]),
-                "camera": np.array([action[1]]),
+                "buttons":np.array([action[0]]),
+                "camera":np.array([action[1]]),  #返回一个工作
             }
-            # Convert to OrderedDict, taking the first element from the array values
             action_dict = OrderedDict({key: value[0] for key, value in action_dict.items()})
             action_dicts.append(action_dict)
-
         return action_dicts
 
     def encode(self, trajectory: dict) -> list[tuple[int]]:

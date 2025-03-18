@@ -23,11 +23,11 @@ need_gui: False
 inventory_distraction_level: "zero"
 
 task_conf:
-  - name: "craft"
-    text: "craft item" 
+  - name: "mine"
+    text: "mine item" 
 
 worker:
-  "craft"
+  "mine"
 
 init_inventory: []
 mobs: []

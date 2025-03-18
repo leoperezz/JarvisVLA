@@ -9,11 +9,12 @@ from minestudio.simulator import MinecraftSim
 from minestudio.simulator.entry import CameraConfig
 from minestudio.simulator.callbacks import (
     SpeedTestCallback, 
-    RecordCallback, 
+    RecordCallback_1, 
     RewardsCallback, 
     TaskCallback,
     FastResetCallback,
     InitInventoryCallback,
+    SummonMobsCallback,
 )
 from minestudio.models import CraftWorker,SmeltWorker
 
@@ -34,6 +35,23 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
     # camera_config
     camera_cfg = CameraConfig(**cfg.camera_config)
     
+    callbacks = [
+        FastResetCallback(
+            biomes=cfg.candidate_preferred_spawn_biome,
+            random_tp_range=cfg.random_tp_range,
+            start_time=cfg.start_time,
+        ), 
+        SpeedTestCallback(50), 
+        TaskCallback(cfg.task_conf),
+        RewardsCallback(cfg.reward_conf),
+        InitInventoryCallback(cfg.init_inventory,
+                                inventory_distraction_level=cfg.inventory_distraction_level),
+        #     
+        RecordCallback_1(record_path=Path(video_path).parent, fps=30,show_actions=True),   
+    ]
+    if cfg.mobs:
+        callbacks.append(SummonMobsCallback(cfg.mobs))
+    
     # init env
     env =  MinecraftSim(
         action_type="env",
@@ -41,19 +59,8 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
         obs_size=cfg.origin_resolution,
         render_size=cfg.resize_resolution,
         camera_config=camera_cfg,
-        callbacks=[
-            FastResetCallback(
-                biomes=cfg.candidate_preferred_spawn_biome,
-                random_tp_range=cfg.random_tp_range,
-                start_time=cfg.start_time,
-            ), 
-            SpeedTestCallback(50), 
-            TaskCallback(cfg.task_conf),
-            RewardsCallback(cfg.reward_conf),
-            RecordCallback(record_path=Path(video_path).parent, fps=30,show_actions=True),
-            InitInventoryCallback(cfg.init_inventory,
-                                  inventory_distraction_level=cfg.inventory_distraction_level)
-        ]
+        preferred_spawn_biome=getattr(cfg,"preferred_spawn_biome",None),
+        callbacks=callbacks
     )
     obs, info = env.reset()
 
@@ -67,6 +74,7 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
         pre_agent = SmeltWorker(env,if_discrete=True)
     
     # 把环境准备好
+    need_crafting_table = False
     if getattr(cfg, "need_gui", False):
         need_crafting_table= getattr(cfg,"need_crafting_table", False)
         need_furnace = getattr(cfg,"need_furnace", False)
@@ -89,7 +97,8 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
             if not pre_agent.info['isGuiOpen']:
                 pre_agent._call_func('inventory')
         # turn env 
-        env.action_type = "agent"  
+        
+    env.action_type = "agent"  
 
 
     if type(base_url)!=type(None):
@@ -106,6 +115,7 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
         if environment_config["verbos"]:
             console.Console().log(action)
         obs, reward, terminated, truncated, info = env.step(action)
+
         
         if reward>0:
             success = (True,i)
@@ -187,8 +197,8 @@ if __name__ == "__main__":
     parser.add_argument('--checkpoints', type=str, default="/public/models/qwen2-vl-7b-instruct/")
     parser.add_argument('--device',type=str,default="cuda:1")
     
-    parser.add_argument('--api-base',type=str,default='http://localhost:9206/v1')
-    parser.add_argument('--video-main-fold',type=str,default='/public/lmy/evaluate')
+    parser.add_argument('--base-url',type=str)
+    parser.add_argument('--video-main-fold',type=str)
     
     parser.add_argument('--instruction-type',type=str,default='normal')
     parser.add_argument('--temperature','-t',type=float,default=0.7)

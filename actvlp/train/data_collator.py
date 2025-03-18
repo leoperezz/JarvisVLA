@@ -2,7 +2,7 @@
 Author: Muyao 2350076251@qq.com
 Date: 2025-03-04 23:26:27
 LastEditors: Muyao 2350076251@qq.com
-LastEditTime: 2025-03-05 03:40:47
+LastEditTime: 2025-03-06 23:02:30
 '''
 
 
@@ -281,12 +281,8 @@ class MultimodalChatDataCollatorforVLM:
         return batch
 
 class VLAMultimodalChatDataCollatorforVLM(MultimodalChatDataCollatorforVLM):
-    def __init__(self, processor, model_path, max_seq_length = 1024, with_grounding:bool = True, with_image = True, resize_image = True, image_folder = None, random_image_size = (224, 224), default_image_size = None, image_factor = None, min_pixels = None, max_pixels = None, max_ratio = None, 
-                 check = False):
-        super().__init__(processor=processor, model_path=model_path, max_seq_length=max_seq_length, with_grounding=with_grounding, 
-                         with_image=with_image, resize_image=resize_image, image_folder=image_folder, random_image_size=random_image_size, default_image_size=default_image_size, 
-                         image_factor=image_factor, min_pixels=min_pixels, max_pixels=max_pixels, max_ratio=max_ratio,
-                         check=check)
+    def __init__(self, processor, model_path, **kwargs):
+        super().__init__(processor=processor, model_path=model_path, **kwargs)
         self.aug_methods = [
             DataAugment.HUE,
             DataAugment.SATURATION,

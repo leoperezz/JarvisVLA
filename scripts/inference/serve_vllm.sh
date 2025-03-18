@@ -1,11 +1,11 @@
 #! /bin/bash
 
-cuda_visible_devices=4,5,6,7
+cuda_visible_devices=0,1,2,3
 card_num=4
-model_name_or_path="/path/to/your/model/directory"
+model_name_or_path="/public/JARVIS/checkpoints2/mc-vla-qwen2-vl-7b-250315-A800-c32-e1-b4-a1/checkpoint-107" #"/path/to/your/model/directory"
 
 CUDA_VISIBLE_DEVICES=$cuda_visible_devices vllm serve $model_name_or_path \
-    --port 9012 \
+    --port 9052 \
     --max-model-len 8448 \
     --max-num-seqs 10 \
     --gpu-memory-utilization 0.8 \
