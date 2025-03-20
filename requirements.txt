@@ -1,3 +1,4 @@
+minestudio
 accelerate==1.2.1
 attrs==24.3.0
 av==14.1.0
