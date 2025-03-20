@@ -14,7 +14,7 @@ WANDB_NAME="$version-c$total_number-e$epoch-b$batch-a$gradient_accumulation_step
 
 
 deepspeed --include localhost:$cuda_visible_devices --master_port=$training_port \
-    actvlp/train/train.py \
+    jarvisvla/train/train.py \
     --deepspeed configs/deepspeed_config_s3.json \
     --dataset_name $dataset_name \
     --dataloader_num_workers 4 \

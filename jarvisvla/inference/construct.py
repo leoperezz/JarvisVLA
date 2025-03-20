@@ -5,8 +5,8 @@ import os
 import safetensors
 from rich import print
 import json
-from actvlp.utils.file_utils import load_json_file,dump_json_file
-from actvlp import QWEN_SPECIAL_TOKENS
+from jarvisvla.utils.file_utils import load_json_file,dump_json_file
+from jarvisvla import QWEN_SPECIAL_TOKENS
 
 def apply_full_model(args):
     base_model_path = args.base_model_path.lower().replace('-','_')

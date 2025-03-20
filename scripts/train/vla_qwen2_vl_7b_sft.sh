@@ -13,7 +13,7 @@ version="mc-vlp-vla-qwen2-vl-7b"
 WANDB_NAME="$version-c$total_number-e$epoch-b$batch-a$gradient_accumulation_steps"
 
 
-CUDA_VISIBLE_DEVICES=$cuda_visible_devices actvlp/train/train.py \
+CUDA_VISIBLE_DEVICES=$cuda_visible_devices jarvisvla/train/train.py \
     --dataset_name $dataset_name \
     --dataloader_num_workers 4 \
     --dataloader_pin_memory True \

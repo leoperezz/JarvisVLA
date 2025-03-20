@@ -40,13 +40,13 @@ import json
 import re
 
 from rich import print,console
-from actvlp.train.utils_train import (
+from jarvisvla.train.utils_train import (
     print_trainable_parameters,
     seed_everything,
     MoreConfig,
 )
-from actvlp import QWEN_SPECIAL_TOKENS
-from actvlp.train.data_collator import make_collator
+from jarvisvla import QWEN_SPECIAL_TOKENS
+from jarvisvla.train.data_collator import make_collator
 
 tqdm.pandas()    
 

@@ -14,7 +14,7 @@ WANDB_NAME="$version-c$total_number-e$epoch-b$batch-a$gradient_accumulation_step
 
 
 deepspeed --hostfile scripts/vla/hostfile --include="hgx1:$cuda_visible_devices@hgx2:$cuda_visible_devices@hgx3:$cuda_visible_devices@hgx4:$cuda_visible_devices" \
-    actvlp/train/train.py \
+    jarvisvla/train/train.py \
     --deepspeed configs/deepspeed_config_s1.json \
     --dataset_name $dataset_name \
     --dataloader_num_workers 4 \

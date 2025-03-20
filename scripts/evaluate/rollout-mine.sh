@@ -26,13 +26,13 @@ for checkpoint in 107 ; do  #800 900 1000 1100 1300
         # Evaluate
         num_iterations=$(($workers / 5 + 1))
         for ((i = 0; i < num_iterations; i++)); do
-            python actvlp/evaluate/evaluate.py \
+            python jarvisvla/evaluate/evaluate.py \
                 --workers $workers \
                 --env-config $env_config \
                 --max-frames $max_frames \
                 --temperature $temperature \
                 --checkpoints $model_name_or_path \
-                --video-main-fold "/home/lmy/workspace/ACTVLP/logs/" \
+                --video-main-fold "/home/lmy/workspace/jarvisvla/logs/" \
                 --base-url "$base_url" \
                 --history-num $history_num \
                 --instruction-type $instruction_type \

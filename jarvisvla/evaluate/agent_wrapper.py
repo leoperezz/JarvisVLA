@@ -9,8 +9,8 @@ from pathlib import Path
 from collections import Counter
 import numpy as np
 
-from actvlp.inference import action_mapping, load_model, processor_wrapper
-from actvlp.utils.file_utils import load_json_file
+from jarvisvla.inference import action_mapping, load_model, processor_wrapper
+from jarvisvla.utils.file_utils import load_json_file
 
 #################
 # prompt

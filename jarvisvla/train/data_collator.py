@@ -24,7 +24,7 @@ from pathlib import Path
 from torch import Tensor
 from copy import deepcopy
 
-from actvlp.train.utils_train import IGNORE_TOKEN_ID
+from jarvisvla.train.utils_train import IGNORE_TOKEN_ID
 
 def make_collator(collator_type: str, **kwargs) -> Callable:
     """

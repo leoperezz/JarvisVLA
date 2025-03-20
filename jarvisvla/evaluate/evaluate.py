@@ -18,9 +18,9 @@ from minestudio.simulator.callbacks import (
 )
 from minestudio.models import CraftWorker,SmeltWorker
 
-from actvlp.evaluate import draw_utils
-from actvlp.utils import file_utils
-from actvlp.evaluate import agent_wrapper
+from jarvisvla.evaluate import draw_utils
+from jarvisvla.utils import file_utils
+from jarvisvla.evaluate import agent_wrapper
 
 
 def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,device="cuda:0",base_url=None):
