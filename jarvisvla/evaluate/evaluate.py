@@ -9,10 +9,10 @@ from minestudio.simulator import MinecraftSim
 from minestudio.simulator.entry import CameraConfig
 from minestudio.simulator.callbacks import (
     SpeedTestCallback, 
-    RecordCallback2, 
+    RecordCallback, 
     RewardsCallback, 
     TaskCallback, 
-    FastResetCallback2, 
+    FastResetCallback, 
     InitInventoryCallback,
     SummonMobsCallback,
     CommandsCallback,
@@ -36,9 +36,9 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
     
     # camera_config
     camera_cfg = CameraConfig(**cfg.camera_config)
-    record_callback = RecordCallback2(record_path=Path(video_path).parent, fps=30,show_actions=True)  
+    record_callback = RecordCallback(record_path=Path(video_path).parent, fps=30,show_actions=True)  
     callbacks = [
-        FastResetCallback2(
+        FastResetCallback(
             biomes=cfg.candidate_preferred_spawn_biome,
             random_tp_range=cfg.random_tp_range,
             start_time=cfg.start_time,
@@ -53,8 +53,8 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
         CommandsCallback(getattr(cfg,"command",[]),),
         record_callback,
     ]
-    if hasattr(cfg,"teleport"):
-        callbacks.append(TeleportCallback(x=cfg.teleport.x, y=cfg.teleport.y, z=cfg.teleport.z,))
+    #if hasattr(cfg,"teleport"):
+    #    callbacks.append(TeleportCallback(x=cfg.teleport.x, y=cfg.teleport.y, z=cfg.teleport.z,))
     if cfg.mobs:
         callbacks.append(SummonMobsCallback(cfg.mobs))
     
