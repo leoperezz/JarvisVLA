@@ -20,9 +20,9 @@ from minestudio.simulator.callbacks import (
 )
 from minestudio.models import CraftWorker,SmeltWorker
 
-from actvlp.evaluate import draw_utils
-from actvlp.utils import file_utils
-from actvlp.evaluate import agent_wrapper
+from jarvisvla.evaluate import draw_utils
+from jarvisvla.utils import file_utils
+from jarvisvla.evaluate import agent_wrapper
 
 
 def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,device="cuda:0",base_url=None):
@@ -105,7 +105,7 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
         # turn env 
         
     env.action_type = "agent"  
-    record_callback.forget()
+    #record_callback.forget()
 
     if type(base_url)!=type(None):
         agent = agent_wrapper.VLLM_AGENT(checkpoint_path=checkpoints,base_url=base_url,**model_config)

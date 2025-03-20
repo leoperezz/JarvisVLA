@@ -1,8 +1,8 @@
 #!/bin/bash
 
-base_url=http://100.100.115.9:9052/v1 #base_url=http://100.77.86.12:9011/v1  #100.100.115.9
-workers=10
-max_frames=400
+base_url=http://localhost:9011/v1
+workers=1
+max_frames=20
 temperature=0.8
 history_num=0
 action_chunk_len=1
@@ -11,10 +11,10 @@ model_local_path="mc-vla-qwen2-vl-7b-250315-A800-c32-e1-b4-a1"
 
 
 tasks=(
-    "kill/kill_sheep"
+    "kill/kill_zombine"
 )
 
-for checkpoint in  107 ; do  #800 900 1000 1100 1300
+for checkpoint in  107 ; do 
     echo "Running for checkpoint $checkpoint..."
 
     checkpoint_path="/public/JARVIS/checkpoints2/$model_local_path/checkpoint-$checkpoint"

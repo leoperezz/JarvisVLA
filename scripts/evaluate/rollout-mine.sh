@@ -1,6 +1,6 @@
 #!/bin/bash
 
-base_url=http://100.100.115.9:9052/v1
+base_url=http://localhost:9012/v1
 workers=5
 max_frames=10000
 temperature=0.6
