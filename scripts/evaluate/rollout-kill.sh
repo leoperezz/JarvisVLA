@@ -1,8 +1,8 @@
 #!/bin/bash
 
 base_url=http://localhost:9011/v1
-workers=1
-max_frames=20
+workers=5
+max_frames=100
 temperature=0.8
 history_num=0
 action_chunk_len=1
@@ -17,8 +17,8 @@ tasks=(
 for checkpoint in  107 ; do 
     echo "Running for checkpoint $checkpoint..."
 
-    checkpoint_path="/public/JARVIS/checkpoints2/$model_local_path/checkpoint-$checkpoint"
-    model_name_or_path="/public/JARVIS/checkpoints2/$model_local_path/checkpoint-$checkpoint"
+    checkpoint_path="/data/models/JarvisVLA-qwen2-vl-7b"
+    model_name_or_path="/data/models/JarvisVLA-qwen2-vl-7b"
     log_path_name="$model_local_path-$checkpoint-$env_file"
 
     for task in "${tasks[@]}"; do

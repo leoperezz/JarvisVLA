@@ -36,7 +36,7 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
     
     # camera_config
     camera_cfg = CameraConfig(**cfg.camera_config)
-    record_callback = RecordCallback(record_path=Path(video_path).parent, fps=30,show_actions=True)  
+    record_callback = RecordCallback(record_path=Path(video_path).parent, fps=30,show_actions=False)  
     callbacks = [
         FastResetCallback(
             biomes=cfg.candidate_preferred_spawn_biome,
