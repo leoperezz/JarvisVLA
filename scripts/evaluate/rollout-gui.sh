@@ -10,11 +10,8 @@ instruction_type="recipe"
 model_local_path="/mc-vla-qwen2-vl-7b-250315-A800-c32-e1-b4-a1" #"mc-vla-qwen2-vl-7b-250311-A800-c32-e1-b16-a1"
 
 tasks=(
-    #"smelt/cooked_beef"
-    #"smelt/iron_ingot"
-    #"craft/craft_ladder"
-    #"craft/craft_crafting_table"
-    "craft/craft_diamond_sword"
+    smelt/iron_ingot
+    craft/craft_crafting_table
 )
 
 for checkpoint in  107 ; do  #800 900 1000 1100 1300

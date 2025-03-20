@@ -4,7 +4,7 @@ import pkg_resources
 from setuptools import setup, find_packages
 
 
-PKG_NAME = "actvlp"
+PKG_NAME = "jarvisvla"
 VERSION = "1.0"
 EXTRAS = {}
 
@@ -29,7 +29,7 @@ setup(
     name=PKG_NAME,
     version=VERSION,
     author=f"CraftJarvis Team",
-    url="https://github.com/CraftJarvis/ACTVLP",
+    url="https://github.com/CraftJarvis/JarvisVLA",
     description="research project",
     long_description=_read_file("README.md"),
     long_description_content_type="text/markdown",
