@@ -9,18 +9,20 @@ from minestudio.simulator import MinecraftSim
 from minestudio.simulator.entry import CameraConfig
 from minestudio.simulator.callbacks import (
     SpeedTestCallback, 
-    RecordCallback_1, 
+    RecordCallback2, 
     RewardsCallback, 
-    TaskCallback,
-    FastResetCallback,
+    TaskCallback, 
+    FastResetCallback2, 
     InitInventoryCallback,
     SummonMobsCallback,
+    CommandsCallback,
+    TeleportCallback,
 )
 from minestudio.models import CraftWorker,SmeltWorker
 
-from jarvisvla.evaluate import draw_utils
-from jarvisvla.utils import file_utils
-from jarvisvla.evaluate import agent_wrapper
+from actvlp.evaluate import draw_utils
+from actvlp.utils import file_utils
+from actvlp.evaluate import agent_wrapper
 
 
 def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,device="cuda:0",base_url=None):
@@ -34,21 +36,25 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
     
     # camera_config
     camera_cfg = CameraConfig(**cfg.camera_config)
-    
+    record_callback = RecordCallback2(record_path=Path(video_path).parent, fps=30,show_actions=True)  
     callbacks = [
-        FastResetCallback(
+        FastResetCallback2(
             biomes=cfg.candidate_preferred_spawn_biome,
             random_tp_range=cfg.random_tp_range,
             start_time=cfg.start_time,
         ), 
         SpeedTestCallback(50), 
-        TaskCallback(cfg.task_conf),
-        RewardsCallback(cfg.reward_conf),
+        TaskCallback(getattr(cfg,"task_conf",None)),
+        RewardsCallback(getattr(cfg,"reward_conf",None)),
         InitInventoryCallback(cfg.init_inventory,
-                                inventory_distraction_level=cfg.inventory_distraction_level),
-        #     
-        RecordCallback_1(record_path=Path(video_path).parent, fps=30,show_actions=True),   
+                                inventory_distraction_level=cfg.inventory_distraction_level,
+                                equip_distraction_level="normal"
+                                ),
+        CommandsCallback(getattr(cfg,"command",[]),),
+        record_callback,
     ]
+    if hasattr(cfg,"teleport"):
+        callbacks.append(TeleportCallback(x=cfg.teleport.x, y=cfg.teleport.y, z=cfg.teleport.z,))
     if cfg.mobs:
         callbacks.append(SummonMobsCallback(cfg.mobs))
     
@@ -60,7 +66,7 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
         render_size=cfg.resize_resolution,
         camera_config=camera_cfg,
         preferred_spawn_biome=getattr(cfg,"preferred_spawn_biome",None),
-        callbacks=callbacks
+        callbacks = callbacks
     )
     obs, info = env.reset()
 
@@ -99,7 +105,7 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
         # turn env 
         
     env.action_type = "agent"  
-
+    record_callback.forget()
 
     if type(base_url)!=type(None):
         agent = agent_wrapper.VLLM_AGENT(checkpoint_path=checkpoints,base_url=base_url,**model_config)
@@ -116,10 +122,15 @@ def evaluate(video_path,checkpoints,environment_config:dict,model_config:dict,de
             console.Console().log(action)
         obs, reward, terminated, truncated, info = env.step(action)
 
-        
         if reward>0:
             success = (True,i)
             break   
+        
+    # sample another 30 steps if success
+    if success[0]:
+        for i in range(20):
+            action = agent.forward([info["pov"]],instructions,verbos=environment_config["verbos"],need_crafting_table = need_crafting_table)
+            obs, reward, terminated, truncated, info = env.step(action)
          
     env.close()
     return success

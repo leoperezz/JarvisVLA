@@ -1,0 +1,32 @@
+defaults:
+  - base
+  - _self_
+
+seed: 3001859308298079279
+teleport:
+  x: 31
+  y: 64
+  z: 61
+command: 
+  - "/time set night"
+
+task_conf:
+  - name: "kill_entity"
+    text: "kill_entity:zombie" 
+
+
+reward_conf: []
+
+mobs: 
+  - name: "zombie"
+    number: 1
+    range_x:  [-2, 2]
+    range_z:  [3, 10]
+
+init_inventory:
+  - slot: 0
+    type: "diamond_sword"
+    quantity: 1
+  - slot: 1
+    type: "golden_apple"
+    quantity: 4

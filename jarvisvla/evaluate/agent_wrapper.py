@@ -9,8 +9,8 @@ from pathlib import Path
 from collections import Counter
 import numpy as np
 
-from jarvisvla.inference import action_mapping, load_model, processor_wrapper
-from jarvisvla.utils.file_utils import load_json_file
+from actvlp.inference import action_mapping, load_model, processor_wrapper
+from actvlp.utils.file_utils import load_json_file
 
 #################
 # prompt
@@ -187,6 +187,7 @@ class VLLM_AGENT:
         if self.instruction_type == 'recipe':
             prompt = self.create_basic_instruction(env_prompt)
             recipe_prompt = self.create_recipe_prompt(env_prompt,method=method)
+
             prompt += recipe_prompt
         elif self.instruction_type == 'simple':
             prompt = self.create_thought(env_prompt) 
@@ -200,7 +201,7 @@ class VLLM_AGENT:
     def create_thought(self,env_prompt):
         thought = copy.copy(self.prompt_library.get(env_prompt,{}).get("thought"))
         if not thought:
-            thought = env_prompt.replace("item",str(1)).replace("_"," ")  #craft item xxx =》 craft 1 item
+            thought = env_prompt.replace("item",str(1)).replace("_"," ").replace(":"," ")   #craft item xxx =》 craft 1 item
         thought += '. \n'
         return thought
         
@@ -219,15 +220,14 @@ class VLLM_AGENT:
         method = self.method_map[need_crafting_table]
         prompts = []
         private_instruction = self.create_instruction(instructions[0],method=method)
+        #print(private_instruction)
         thought= self.create_thought(instructions[0]) if self.instruction_type =="recipe" else ""
 
         if self.history_num:
             if not self.history: #如果历史为空
-                self.history = [(image,self.action_tokenizer.null_token()[0],copy.copy(thought),0)]*self.history_num
+                self.history = [(image,self.action_tokenizer.null_token(),copy.copy(thought),0)]*self.history_num
             new_history = [None]*self.history_num
             new_history[:-1] = self.history[1:]
-            history_images = []
-            history_action_chunks = []
             for hdx,(im, ac, past_thought,_) in enumerate(self.history):
                 prompt_input = ""
                 if self.instruction_type == 'recipe':
@@ -236,7 +236,7 @@ class VLLM_AGENT:
                     prompt_input = "\nobservation: "
                 if not hdx: #hdx==0
                     prompt_input = private_instruction + prompt_input
-                print(ac,prompt_input,)
+                #print(ac,prompt_input,)
                 messages.append(self.processor_wrapper.create_message_vllm(role="user",input_type="image",prompt=[prompt_input],image=[im]))
                 messages.append(self.processor_wrapper.create_message_vllm(role="assistant",input_type="text",prompt=[ac],))
             
@@ -247,8 +247,8 @@ class VLLM_AGENT:
             prompt_input = "\nobservation: "
         if not self.history_num:
             prompt_input = private_instruction + prompt_input
-        print(prompt_input)
-        exit()
+        #print(prompt_input)
+
         messages.append(self.processor_wrapper.create_message_vllm(role="user",input_type="image",prompt=[prompt_input],image=[image]))
         
         open_logprobs = False

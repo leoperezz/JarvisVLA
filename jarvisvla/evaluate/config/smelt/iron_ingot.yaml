@@ -3,7 +3,6 @@ defaults:
   - _self_
 
 
-
 task_conf:
   - name: "iron_ingot"
     text: "craft_item:iron_ingot" 
