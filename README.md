@@ -1,6 +1,20 @@
-Official Implementation of Paper "Learning to Better Act by Post-training on Vision Language Tasks"
+# JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse
+<div align="center">
 
-The code will be released soon (in a week) ...
+[[Website]](https://craftjarvis.github.io/JarvisVLA/)
+[[Arxiv Paper]](https://arxiv.org/pdf/2503.16365)
+[[Datasets]](https://huggingface.co/datasets/CraftJarvis/minecraft-vla-sft)
+[[Models]](https://huggingface.co/collections/CraftJarvis/jarvis-vla-v1-67dc157a99d011efd7d7f7e4)
+[[Team]](https://github.com/CraftJarvis)
+
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/MineDojo)](https://pypi.org/project/MineDojo/)
+[<img src="https://img.shields.io/badge/Framework-PyTorch-red.svg"/>](https://pytorch.org/)
+[![GitHub license](https://img.shields.io/github/license/MineDojo/MineCLIP)](https://github.com/MineDojo/MineCLIP/blob/main/license)
+</div>
+
+## Updates
+
+* [2025.03.21] Our paper can be found in [arXiv](https://arxiv.org/pdf/2503.16365).
 
 ## Installation
 Install dependencies.
