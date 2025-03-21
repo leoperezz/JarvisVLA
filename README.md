@@ -8,11 +8,11 @@
 
 [**Project Website**](https://craftjarvis.github.io/JarvisVLA/) | [**Datasets**](https://huggingface.co/datasets/CraftJarvis/minecraft-vla-sft) 
 
-### Updates
+## Updates
 
 * [2025.03.21] Our paper can be found in [arXiv](https://arxiv.org/pdf/2503.16365).
 
-### Installation
+## Installation
 Install dependencies.
 ```shell
 git clone https://github.com/CraftJarvis/JarvisVLA.git
@@ -31,7 +31,7 @@ python -m minestudio.simulator.entry # using Xvfb
 MINESTUDIO_GPU_RENDER=1 python -m minestudio.simulator.entry # using VirtualGL
 ```
 
-### Rollout 
+## Inference 
 
 You can serve the model with vllm to support multi-GPU and multi-process rollout.
 ```sh
@@ -44,7 +44,7 @@ Finally, you can run the rollout script.
 sh scripts/evaluate/rollout-kill.sh
 ```
 
-### Train
+## Train
 
 Prepare the dataset and base model, and write their locations in the shell below.
 
@@ -63,7 +63,7 @@ sh scripts/vla/vla_qwen2_vl_7b_sft-multi-node.sh
 
 ---
 
-#### Citation
+### Citation
 
 If you find our code or models useful in your work, please cite [our paper](https://arxiv.org/abs/2406.09246):
 
