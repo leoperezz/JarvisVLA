@@ -7,7 +7,7 @@ node_number=4
 total_number=$(($card_number * $node_number))
 training_port=24001
 
-dataset_name="/public/lmy/dataset/vla-data-all" #end before '-train.json' and '-valid.json'
+dataset_name="CraftJarvis/JarvisVLA-Qwen2-VL-7B" #end before '-train.json' and '-valid.json'
 base_model_path="/public/models/mc-base-qwen2-vl-7b-250215"
 version="mc-vlp-vla-qwen2-vl-7b"
 WANDB_NAME="$version-c$total_number-e$epoch-b$batch-a$gradient_accumulation_steps"
