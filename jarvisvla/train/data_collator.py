@@ -140,7 +140,10 @@ class MultimodalChatDataCollatorforVLM:
             
             # prepare images
             if self.with_image:
-                local_image_paths = example.get('image') if example.get('image') else []
+                if "image_bytes" in example:
+                    local_image_paths = example.get("image_bytes",[])
+                else:
+                    local_image_paths = example.get('image') if example.get('image') else []
                 local_images = []
                 current_visit_image_idx = 0
                 if isinstance(local_image_paths, list):

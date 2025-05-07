@@ -2,7 +2,7 @@
 Author: Muyao 2350076251@qq.com
 Date: 2025-03-04 23:35:08
 LastEditors: Muyao 2350076251@qq.com
-LastEditTime: 2025-03-05 03:48:14
+LastEditTime: 2025-03-21 15:41:51
 '''
 import logging
 import os
@@ -150,14 +150,8 @@ if __name__ == "__main__":
     # Dataset
     ################
     
-    train_dataset_file = sft_script_args.dataset_name + "-train.json"
-    if not os.path.exists(train_dataset_file):
-        train_dataset_file = sft_script_args.dataset_name + "-train.jsonl"
-    eval_dataset_file = sft_script_args.dataset_name + "-valid.json"
-    if training_args.local_rank == 0 or training_args.local_rank == -1:
-        print(train_dataset_file)
-    raw_datasets = load_dataset("json", data_files={"train": train_dataset_file, "validation": eval_dataset_file})
-
+    raw_datasets = load_dataset(sft_script_args.dataset_name)
+    
     train_dataset = raw_datasets['train']
     train_dataset_len = train_dataset.num_rows
     train_dataset_len = int(more_cfg.dataset_p*train_dataset_len)
