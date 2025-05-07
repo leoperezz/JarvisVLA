@@ -79,7 +79,7 @@ start_vllm_server_with_retry() {
             --max-num-seqs $MAX_NUM_SEQS \
             --port 8000" > vllm_server.log 2>&1 &
         
-        sleep 20  # Generous initialization time
+        sleep 20 
         
         if curl -s http://localhost:8000/health > /dev/null; then
             echo -e "${GREEN}vllm server started successfully.${NC}"

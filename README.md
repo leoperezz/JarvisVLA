@@ -30,7 +30,7 @@ install_jarvisvla.sh
 nano install_jarvisvla.sh
 
 ```
-2.1 Locate and update these values (around line 15):
+  2.1 Locate and update these values (around line 15):
 
 ```bash
 
