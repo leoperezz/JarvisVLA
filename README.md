@@ -43,7 +43,7 @@ pip install git+https://github.com/CraftJarvis/MineStudio.git
 After the installation, you can run the following command to check if the installation is successful and the environment is working:
 
 ```shell
-__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia python hello_world.py
+__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia python test/hello_world.py
 ```
 
 ## Inference 
