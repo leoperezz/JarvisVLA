@@ -23,12 +23,27 @@ conda install --channel=conda-forge openjdk=8 -y
 pip install -e .
 ```
 
+You need glx to run this:
+
+```shell
+sudo apt install libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev mesa-utils
+```
+
+The check the installation:
+
+```shell
+glxinfo | grep "OpenGL"
+```
+
+Then you need to install MineStudio from the repository
+```shell
+pip install git+https://github.com/CraftJarvis/MineStudio.git
+```
+
 After the installation, you can run the following command to check if the installation is successful and the environment is working:
 
 ```shell
-# After the installation, you can run the following command to check if the installation is successful:
-python -m minestudio.simulator.entry # using Xvfb
-MINESTUDIO_GPU_RENDER=1 python -m minestudio.simulator.entry # using VirtualGL
+__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia python hello_world.py
 ```
 
 ## Inference 
