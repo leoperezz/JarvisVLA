@@ -13,38 +13,22 @@
 * [2025.03.21] Our paper can be found in [arXiv](https://arxiv.org/pdf/2503.16365).
 
 ## Installation
-
-## Automated Installation (Recommended)
-
-1. **Download the installation script**:
-
-```bash
-
-install_jarvisvla.sh
-
-```
-2. Configure your credentials:
-
-```bash
-
-nano install_jarvisvla.sh
-
-```
-  2.1 Locate and update these values (around line 15):
-
-```bash
-
-HF_TOKEN="hf_your_actual_token_here"  # Replace with your Hugging Face token
-
+Install dependencies.
+```shell
+git clone https://github.com/CraftJarvis/JarvisVLA.git
+conda create -n mcvla python=3.10
+conda activate mcvla
+cd JarvisVLA
+conda install --channel=conda-forge openjdk=8 -y
+pip install -e .
 ```
 
-3. Run the installation:
+After the installation, you can run the following command to check if the installation is successful and the environment is working:
 
-```bash
-
-chmod +x install_jarvisvla.sh
-./install_jarvisvla.sh | tee installation.log  
-
+```shell
+# After the installation, you can run the following command to check if the installation is successful:
+python -m minestudio.simulator.entry # using Xvfb
+MINESTUDIO_GPU_RENDER=1 python -m minestudio.simulator.entry # using VirtualGL
 ```
 
 ## Inference 
